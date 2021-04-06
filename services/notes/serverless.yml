@@ -29,20 +29,22 @@ provider:
     stripeSecretKey: ${env:STRIPE_SECRET_KEY}
     tableName: !ImportValue "${self:custom.sstApp}-TableName"
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:Scan
-        - dynamodb:Query
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-        - dynamodb:DescribeTable
-      # Restrict our IAM role permissions to
-      # the specific table for the stage
-      Resource:
-        - !ImportValue "${self:custom.sstApp}-TableArn"
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Scan
+            - dynamodb:Query
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:DescribeTable
+          # Restrict our IAM role permissions to
+          # the specific table for the stage
+          Resource:
+            - !ImportValue "${self:custom.sstApp}-TableArn"
 
 functions:
   # Defines an HTTP API endpoint that calls the main function in create.js
